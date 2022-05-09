@@ -68,7 +68,7 @@ h3#logo a {
 }
 
 h3#logo a:hover {
-    text-decoration: 1px underline;
+    text-decoration: underline;
 }
 
 nav.desktop ul {
@@ -130,50 +130,31 @@ main {
     flex: 1 0 auto;
 }
 
-section.introducao {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    flex-wrap: wrap;
-    color: var(--cor3);
-    background-color: white;
-    padding: 20px;
+section.error {
+    text-align: center;
+    margin-top: 60px;
 }
 
-section.introducao>div.txt {
-    max-width: 300px;
-    color: var(--cor3);
-    background-color: white;
-    text-align: left;
+section.error>h1 {
     font-family: 'Roboto', Arial, Helvetica, sans-serif;
-    padding: 30px 20px;
-    margin: 50px 0;
-}
-
-div.txt h3 {
-    font-family: 'Roboto', Arial, Helvetica, sans-serif;
-    font-size: 1.9em;
+    font-size: 2.5em;
     font-weight: 600;
     text-shadow: var(--cor4) 1px 2px 1px;
 }
 
-div.txt p {
+section.error>p {
     font-family: 'Roboto';
     font-weight: bold;
     font-size: 1.1em;
     font-style: italic;
 }
 
-div.imagem {
-    margin: 20px;
-    background-color: var(--cor3);
-    border-radius: 150px 60px 210px 50px;
-    max-width: 80%;
-    box-shadow: 3px 3px 3px rgba(14, 0, 37, 0.445);
+section.error>p>a {
+    color: var(--cor3);
 }
 
-div.imagem img {
-    max-width: 100%;
+section.error>p>a:hover {
+    color: var(--cor1);
 }
 
 footer {
