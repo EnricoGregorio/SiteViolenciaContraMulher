@@ -12,6 +12,8 @@ VALUES("Injúria");
 INSERT INTO NaturezasFato(natureza)
 VALUES("Feminicídio");
 INSERT INTO NaturezasFato(natureza)
+VALUES("Outra");
+INSERT INTO NaturezasFato(natureza)
 VALUES("Não informado");
 
 -- Grau de Escolaridade.
@@ -49,6 +51,8 @@ INSERT INTO Bairros(bairro)
 VALUES("Uraim");
 INSERT INTO Bairros(bairro)
 VALUES("JK");
+INSERT INTO Bairros(bairro)
+VALUES("Outro");
 INSERT INTO Bairros(bairro)
 VALUES("Não informado");
 
