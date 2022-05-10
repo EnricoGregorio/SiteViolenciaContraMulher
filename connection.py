@@ -11,52 +11,66 @@ setDB = {
 db = pymysql.connect(**setDB)
 
 # Códigos para query no banco:
-
-# Cadastros:
-        
-# Cadastro de Alunos:
-def setAluno(matricula, nome, idTurma, idCurso, idade, idGenero, idRaca, idTransporte):
+# Consultar os IDs de grau de escolaridade e de raça para as vítimas e agressores:  
+def getIDs(g, r, b, n, g2, r2):
     with db.cursor() as cursor:
-        values = (matricula, nome, idTurma, idCurso, idade, idGenero, idRaca, idTransporte)
-        query = "INSERT INTO Alunos(matricula, aluno, idturma, idcurso, idade, idgenero, idraca, idtransporte) VALUES(%s, %s, %s, %s, %s, %s, %s, %s);"
+        # Pegar o ID do Grau Escolar pelo Grau(g).
+        query = "SELECT id FROM GrausEscolaridade WHERE grau = %s;"
+        cursor.execute(query, g)
+        grauEscolar = cursor.fetchone()
+        idGrauEscolar = grauEscolar[0]
+        # --------------------------------------------------------
+        query = "SELECT id FROM GrausEscolaridade WHERE grau = %s;"
+        cursor.execute(query, g2)
+        grauEscolar2 = cursor.fetchone()
+        idGrauEscolarAgressor = grauEscolar2[0]
+        # Pegar o ID da Raça pelo Raca(r).
+        query = "SELECT id FROM Racas WHERE raca = %s;"
+        cursor.execute(query, r)
+        raca = cursor.fetchone()
+        idRaca = raca[0]
+        # --------------------------------------------------------
+        query = "SELECT id FROM Racas WHERE raca = %s;"
+        cursor.execute(query, r2)
+        raca2 = cursor.fetchone()
+        idRacaAgressor = raca2[0]
+        # Pegar o ID da Natureza do Fato pela Natureza(n).
+        query = "SELECT id FROM NaturezasFato WHERE natureza = %s;"
+        cursor.execute(query, n)
+        naturezaFato = cursor.fetchone()
+        idNaturezaFato = naturezaFato[0]
+        # Pegar o ID do Bairro pelo Bairro(b).
+        query = "SELECT id FROM Bairros WHERE bairro = %s;"
+        cursor.execute(query, b)
+        bairro = cursor.fetchone()
+        idBairro = bairro[0]
+        # Criar uma lista para retornar os dois valores.
+        ids = [idGrauEscolar, idRaca, idBairro, idNaturezaFato, idGrauEscolarAgressor, idRacaAgressor]
+        return ids
+
+# Cadastro de Vítimas:
+def setVitimaEAgressor(idade, qtdFilhos, grauEscolaridade, profissao, raca, bairro, natuFato, idadeAgressor, grauEscolaridadeAgressor, profissaoAgressor, racaAgressor):
+    with db.cursor() as cursor:
+        values = (idade, qtdFilhos, grauEscolaridade, profissao, raca, bairro, natuFato, idadeAgressor, grauEscolaridadeAgressor, profissaoAgressor, racaAgressor)
+        query = "INSERT INTO VitimasAgressores(idade, numfilhos, idgrauescolar, profissao, idraca, idbairro, idnatufato, idadeagressor, idgrauescolaragressor, profissaoagressor, idracaagressor) VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);"
         try:
             cursor.execute(query, values)
             db.commit()
             return 1
         except pymysql.IntegrityError as err:
             return 0
-
-# Consultas:  
-def getTurmaCursoSexoRacaeMeio(t, c, s, r, m):
-    with db.cursor() as cursor:
-        # Pegar o ID da turma pela Turma(t).
-        query = "SELECT id FROM Turmas WHERE turma = %s;"
-        cursor.execute(query, t)
-        turma = cursor.fetchone()
-        idTurma = turma[0]
-        # Pegar o ID do curso pelo Curso(c).
-        query = "SELECT id FROM Cursos WHERE curso = %s;"
-        cursor.execute(query, c)
-        curso = cursor.fetchone()
-        idCurso = curso[0]
-        # Pegar o ID do sexo pelo Sexo(s).
-        query = "SELECT id FROM Generos WHERE sexo = %s;"
-        cursor.execute(query, s)
-        sexo = cursor.fetchone()
-        idSexo = sexo[0]
-        # Pegar o ID da raça pelo Raca(r).
-        query = "SELECT id FROM Racas WHERE raca = %s;"
-        cursor.execute(query, r)
-        raca = cursor.fetchone()
-        idRaca = raca[0]
-        # Pegar o ID do transporte pelo Meio(m).
-        query = "SELECT id FROM Transportes WHERE meio = %s;"
-        cursor.execute(query, m)
-        meio = cursor.fetchone()
-        idMeio = meio[0]
-        # Criar uma lista para retornar os dois valores.
-        sexoTurmaCursoRacaeMeio = [idSexo, idTurma, idCurso, idRaca, idMeio]
-        return sexoTurmaCursoRacaeMeio
+        
+# Cadastro de Agressores:
+# def setAgressor(idade, grauEscolaridade, profissao, raca, bairro, natuFato):
+#     with db.cursor() as cursor:
+#         values = (idade, grauEscolaridade, profissao, raca, bairro, natuFato)
+#         query = "INSERT INTO VitimasAgressores(idade, idgrauescolar, profissao, idraca, idbairro, idnatufato) VALUES(%s, %s, %s, %s, %s, %s);"
+#         try:
+#             cursor.execute(query, values)
+#             db.commit()
+#             return 1
+#         except pymysql.IntegrityError as err:
+#             return 0
 
 # Consulta de Alunos:
 def getAlunos(matricula):

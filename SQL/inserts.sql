@@ -2,6 +2,8 @@ USE dbcamara;
 
 -- Natureza do fato.
 INSERT INTO NaturezasFato(natureza)
+VALUES("Não informado");
+INSERT INTO NaturezasFato(natureza)
 VALUES("Violência psicológica (ameaça)");
 INSERT INTO NaturezasFato(natureza)
 VALUES("Lesão corporal");
@@ -13,10 +15,10 @@ INSERT INTO NaturezasFato(natureza)
 VALUES("Feminicídio");
 INSERT INTO NaturezasFato(natureza)
 VALUES("Outra");
-INSERT INTO NaturezasFato(natureza)
-VALUES("Não informado");
 
 -- Grau de Escolaridade.
+INSERT INTO GrausEscolaridade(grau)
+VALUES("Não informado");
 INSERT INTO GrausEscolaridade(grau)
 VALUES("Superior completo");
 INSERT INTO GrausEscolaridade(grau)
@@ -33,10 +35,10 @@ INSERT INTO GrausEscolaridade(grau)
 VALUES("Lê e escreve");
 INSERT INTO GrausEscolaridade(grau)
 VALUES("Analfabeto");
-INSERT INTO GrausEscolaridade(grau)
-VALUES("Não informado");
 
 -- Bairros.
+INSERT INTO Bairros(bairro)
+VALUES("Não informado");
 INSERT INTO Bairros(bairro)
 VALUES("Promissão I");
 INSERT INTO Bairros(bairro)
@@ -53,10 +55,10 @@ INSERT INTO Bairros(bairro)
 VALUES("JK");
 INSERT INTO Bairros(bairro)
 VALUES("Outro");
-INSERT INTO Bairros(bairro)
-VALUES("Não informado");
 
 -- Raças.
+INSERT INTO Racas(raca)
+VALUES("Não informado");
 INSERT INTO Racas(raca)
 VALUES("Amarelo");
 INSERT INTO Racas(raca)
