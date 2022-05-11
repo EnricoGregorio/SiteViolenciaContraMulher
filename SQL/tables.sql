@@ -49,6 +49,7 @@ CREATE TABLE Racas(
 
 CREATE TABLE VitimasAgressores(
     id INT AUTO_INCREMENT,
+    mesocorrido VARCHAR(2) NOT NULL,
     idade INT,
     numfilhos INT,
     idgrauescolar INT NOT NULL,

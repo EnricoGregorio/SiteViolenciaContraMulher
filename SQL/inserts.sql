@@ -2,8 +2,6 @@ USE dbcamara;
 
 -- Natureza do fato.
 INSERT INTO NaturezasFato(natureza)
-VALUES("Não informado");
-INSERT INTO NaturezasFato(natureza)
 VALUES("Violência psicológica (ameaça)");
 INSERT INTO NaturezasFato(natureza)
 VALUES("Lesão corporal");

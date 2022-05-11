@@ -38,12 +38,9 @@
         </nav>
     </header>
     <main>
-        <section class="introducao">
-            <img src="../static/img/FlorSite1.png" alt="Flor de fundo para site.">
-            <div class="txt">
-                <h3>Lorem ipsum dolor sit amet.</h3>
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Blanditiis maxime adipisci sint natus corporis temporibus amet autem at, atque, voluptas corrupti id consequuntur quia placeat accusantium qui, impedit laborum dignissimos?</p>
-            </div>
+        <section class="graficos">
+            <div id="columnchart_values" style="width: 500px; height: 300px;"></div>
+            <div id="piechart" style="width: 500px; height: 500px;"></div>
         </section>
     </main>
     <footer>
@@ -51,6 +48,82 @@
     </footer>
     <script src="../static/js/jquery.js"></script>
     <script src="../static/js/script.js"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+        let val1 = parseInt('{{qtdGrauEscolarVitima[1]}}')
+        let val2 = parseInt('{{qtdGrauEscolarVitima[2]}}')
+        let val3 = parseInt('{{qtdGrauEscolarVitima[3]}}')
+        let val4 = parseInt('{{qtdGrauEscolarVitima[4]}}')
+        let val5 = parseInt('{{qtdGrauEscolarVitima[5]}}')
+        let val6 = parseInt('{{qtdGrauEscolarVitima[6]}}')
+        let val7 = parseInt('{{qtdGrauEscolarVitima[7]}}')
+        let val8 = parseInt('{{qtdGrauEscolarVitima[8]}}')
+        let val9 = parseInt('{{qtdGrauEscolarVitima[0]}}')
+        let val10 = parseInt('{{qtdGrauEscolarVitima[9]}}')
+        let val11 = parseInt('{{qtdGrauEscolarVitima[10]}}')
+        let val12 = parseInt('{{qtdGrauEscolarVitima[11]}}')
+        let val13 = parseInt('{{qtdGrauEscolarVitima[12]}}')
+        let val14 = parseInt('{{qtdGrauEscolarVitima[13]}}')
+        let val15 = parseInt('{{qtdGrauEscolarVitima[14]}}')
+
+        google.charts.load("current", {'packages':['corechart']});
+        google.charts.setOnLoadCallback(drawChart1);
+        google.charts.load('current', {'packages':['corechart']});
+        google.charts.setOnLoadCallback(drawChart2);
+        function drawChart1() {
+            let data = google.visualization.arrayToDataTable([
+                ["Grau Escolar", "Quantidade", { role: "style" } ],
+                ["Superior completo", val1, "#2f2b4e"],
+                ["Superior incompleto", val2, "#5a5485"],
+                ["Ensino Médio completo", val3, "#f69eb6"],
+                ["Ensino Médio incompleto", val4, "#8e9fd5"],
+                ["Ensino Fundamental completo", val5, "#fbd1dc"],
+                ["Ensino Fundamental incompleto", val6, "#2f2b4e"],
+                ["Lê e escreve", val7, "#5a5485"],
+                ["Analfabeta", val8, "#f69eb6"],
+                ["Não informado", val9, "#8e9fd5"]
+            ]);
+
+            let view = new google.visualization.DataView(data);
+            view.setColumns([0, 1, 2]);
+
+            let options = {
+                title: "Qtd. de Vítimas Por Grau de Escolaridade",
+                width: 600,
+                height: 400,
+                bar: {groupWidth: "95%"},
+                legend: { position: "none" },
+            };
+            let chart = new google.visualization.ColumnChart(document.getElementById("columnchart_values"));
+            chart.draw(view, options);
+        }
+
+        function drawChart2() {
+            let data = google.visualization.arrayToDataTable([
+                ['Natureza do Fato', 'Qtd. de Vítimas por Natureza do Fato', {role: 'style'}],
+                ['Violência psicológica (ameaça)', val10, "#2f2b4e"],
+                ['Lesão corporal', val11, "#5a5485"],
+                ['Perseguição', val12, "#f69eb6"],
+                ['Injúria', val13, "#8e9fd5"],
+                ['Feminicídio', val14, "#fbd1dc"],
+                ['Outra', val15, "#2f2b4e"]
+            ]);
+
+            let view = new google.visualization.DataView(data);
+            view.setColumns([0, 1, 2]);
+
+            let options = {
+                title: 'Qtd. de Vítimas por Natureza do Fato',
+                width: 600,
+                height: 400,
+                bar: {groupWidth: "95%"},
+                legend: { position: "none" },
+            };
+            
+            let chart = new google.visualization.PieChart(document.getElementById('piechart'));
+            chart.draw(data, options);
+        }
+    </script>
 </body>
 
 </html>

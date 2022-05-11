@@ -49,59 +49,65 @@ def getIDs(g, r, b, n, g2, r2):
         return ids
 
 # Cadastro de Vítimas:
-def setVitimaEAgressor(idade, qtdFilhos, grauEscolaridade, profissao, raca, bairro, natuFato, idadeAgressor, grauEscolaridadeAgressor, profissaoAgressor, racaAgressor):
+def setVitimaEAgressor(mes, idade, qtdFilhos, grauEscolaridade, profissao, raca, bairro, natuFato, idadeAgressor, grauEscolaridadeAgressor, profissaoAgressor, racaAgressor):
     with db.cursor() as cursor:
-        values = (idade, qtdFilhos, grauEscolaridade, profissao, raca, bairro, natuFato, idadeAgressor, grauEscolaridadeAgressor, profissaoAgressor, racaAgressor)
-        query = "INSERT INTO VitimasAgressores(idade, numfilhos, idgrauescolar, profissao, idraca, idbairro, idnatufato, idadeagressor, idgrauescolaragressor, profissaoagressor, idracaagressor) VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);"
+        values = (mes, idade, qtdFilhos, grauEscolaridade, profissao, raca, bairro, natuFato, idadeAgressor, grauEscolaridadeAgressor, profissaoAgressor, racaAgressor)
+        query = "INSERT INTO VitimasAgressores(mesocorrido, idade, numfilhos, idgrauescolar, profissao, idraca, idbairro, idnatufato, idadeagressor, idgrauescolaragressor, profissaoagressor, idracaagressor) VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);"
         try:
             cursor.execute(query, values)
             db.commit()
             return 1
         except pymysql.IntegrityError as err:
             return 0
-        
-# Cadastro de Agressores:
-# def setAgressor(idade, grauEscolaridade, profissao, raca, bairro, natuFato):
-#     with db.cursor() as cursor:
-#         values = (idade, grauEscolaridade, profissao, raca, bairro, natuFato)
-#         query = "INSERT INTO VitimasAgressores(idade, idgrauescolar, profissao, idraca, idbairro, idnatufato) VALUES(%s, %s, %s, %s, %s, %s);"
-#         try:
-#             cursor.execute(query, values)
-#             db.commit()
-#             return 1
-#         except pymysql.IntegrityError as err:
-#             return 0
 
-# Consulta de Alunos:
-def getAlunos(matricula):
+def getGrauEscolarVitima():
     with db.cursor() as cursor:
-        if matricula == '':
-            query = f"SELECT a.matricula, a.aluno, t.turma, c.curso, CASE WHEN a.idade = 0 THEN 'Não' ELSE 'Sim' END AS idade, g.sexo, r.raca, m.meio FROM Alunos AS a INNER JOIN Turmas AS t ON t.id = a.idturma INNER JOIN Cursos AS c ON c.id = a.idcurso INNER JOIN Generos AS g ON g.id = a.idgenero INNER JOIN Racas AS r ON r.id = a.idraca INNER JOIN Transportes AS m ON m.id = a.idtransporte ORDER BY t.turma, c.curso;"
-            cursor.execute(query)
-            alunos = cursor.fetchall()
-            return alunos
-        else:
-            query = f"SELECT a.matricula, a.aluno, t.turma, c.curso, CASE WHEN a.idade = 0 THEN 'Não' ELSE 'Sim' END AS idade, g.sexo, r.raca, m.meio FROM Alunos AS a INNER JOIN Turmas AS t ON t.id = a.idturma INNER JOIN Cursos AS c ON c.id = a.idcurso INNER JOIN Generos AS g ON g.id = a.idgenero INNER JOIN Racas AS r ON r.id = a.idraca INNER JOIN Transportes AS m ON m.id = a.idtransporte WHERE a.matricula LIKE '%{matricula}%' ORDER BY t.turma, c.curso;"
-            cursor.execute(query)
-            alunos = cursor.fetchall()
-            return alunos
-        
-# Consulta de quantidade de Alunos:
-def getQTDAlunos():
-    with db.cursor() as cursor:
-        # Querys
-        # Turmas
-        query1 = "SELECT COUNT(a.matricula) AS alunos FROM Alunos AS a INNER JOIN Turmas AS t ON t.id = a.idturma WHERE t.id = 1;"
-        query2 = "SELECT COUNT(a.matricula) AS alunos FROM Alunos AS a INNER JOIN Turmas AS t ON t.id = a.idturma WHERE t.id = 2;"
-        query3 = "SELECT COUNT(a.matricula) AS alunos FROM Alunos AS a INNER JOIN Turmas AS t ON t.id = a.idturma WHERE t.id = 3;"
-        # Execução das querys
-        # Turmas
+        # Querys para nosso gráfico de grau escolar das vítimas.
+        query1 = "SELECT COUNT(p.idgrauescolar) FROM VitimasAgressores AS p INNER JOIN GrausEscolaridade As g ON g.id = p.idgrauescolar WHERE g.grau = 'Não informado';"
+        query2 = "SELECT COUNT(p.idgrauescolar) FROM VitimasAgressores AS p INNER JOIN GrausEscolaridade As g ON g.id = p.idgrauescolar WHERE g.grau = 'Superior completo';"
+        query3 = "SELECT COUNT(p.idgrauescolar) FROM VitimasAgressores AS p INNER JOIN GrausEscolaridade As g ON g.id = p.idgrauescolar WHERE g.grau = 'Superior incompleto';"
+        query4 = "SELECT COUNT(p.idgrauescolar) FROM VitimasAgressores AS p INNER JOIN GrausEscolaridade As g ON g.id = p.idgrauescolar WHERE g.grau = 'Ensino Médio completo';"
+        query5 = "SELECT COUNT(p.idgrauescolar) FROM VitimasAgressores AS p INNER JOIN GrausEscolaridade As g ON g.id = p.idgrauescolar WHERE g.grau = 'Ensino Médio incompleto';"
+        query6 = "SELECT COUNT(p.idgrauescolar) FROM VitimasAgressores AS p INNER JOIN GrausEscolaridade As g ON g.id = p.idgrauescolar WHERE g.grau = 'Ensino Fundamental completo';"
+        query7 = "SELECT COUNT(p.idgrauescolar) FROM VitimasAgressores AS p INNER JOIN GrausEscolaridade As g ON g.id = p.idgrauescolar WHERE g.grau = 'Ensino Fundamental incompleto';"
+        query8 = "SELECT COUNT(p.idgrauescolar) FROM VitimasAgressores AS p INNER JOIN GrausEscolaridade As g ON g.id = p.idgrauescolar WHERE g.grau = 'Lê e escreve';"
+        query9 = "SELECT COUNT(p.idgrauescolar) FROM VitimasAgressores AS p INNER JOIN GrausEscolaridade As g ON g.id = p.idgrauescolar WHERE g.grau = 'Analfabeto';"
+        query10 = "SELECT COUNT(p.idnatufato) FROM VitimasAgressores AS p INNER JOIN NaturezasFato As n ON n.id = p.idnatufato WHERE n.natureza = 'Violência psicológica (ameaça)';"
+        query11 = "SELECT COUNT(p.idnatufato) FROM VitimasAgressores AS p INNER JOIN NaturezasFato As n ON n.id = p.idnatufato WHERE n.natureza = 'Lesão corporal';"
+        query12 = "SELECT COUNT(p.idnatufato) FROM VitimasAgressores AS p INNER JOIN NaturezasFato As n ON n.id = p.idnatufato WHERE n.natureza = 'Perseguição';"
+        query13 = "SELECT COUNT(p.idnatufato) FROM VitimasAgressores AS p INNER JOIN NaturezasFato As n ON n.id = p.idnatufato WHERE n.natureza = 'Injúria';"
+        query14 = "SELECT COUNT(p.idnatufato) FROM VitimasAgressores AS p INNER JOIN NaturezasFato As n ON n.id = p.idnatufato WHERE n.natureza = 'Feminicídio';"
+        query15 = "SELECT COUNT(p.idnatufato) FROM VitimasAgressores AS p INNER JOIN NaturezasFato As n ON n.id = p.idnatufato WHERE n.natureza = 'Outra';"
+        # Comando para executar e guardar a qtd. de vítimas por grau escolar.
         cursor.execute(query1)
         val1 = cursor.fetchone()
         cursor.execute(query2)
         val2 = cursor.fetchone()
         cursor.execute(query3)
         val3 = cursor.fetchone()
-        # Junte tudo em uma lista e a retorne.
-        countAlunos = [val1[0], val2[0], val3[0]]
-        return countAlunos
+        cursor.execute(query4)
+        val4 = cursor.fetchone()
+        cursor.execute(query5)
+        val5 = cursor.fetchone()
+        cursor.execute(query6)
+        val6 = cursor.fetchone()
+        cursor.execute(query7)
+        val7 = cursor.fetchone()
+        cursor.execute(query8)
+        val8 = cursor.fetchone()
+        cursor.execute(query9)
+        val9 = cursor.fetchone()
+        cursor.execute(query10)
+        val10 = cursor.fetchone()
+        cursor.execute(query11)
+        val11 = cursor.fetchone()
+        cursor.execute(query12)
+        val12 = cursor.fetchone()
+        cursor.execute(query13)
+        val13 = cursor.fetchone()
+        cursor.execute(query14)
+        val14 = cursor.fetchone()
+        cursor.execute(query15)
+        val15 = cursor.fetchone()
+        countQtdVit = [val1[0], val2[0], val3[0], val4[0], val5[0], val6[0], val7[0], val8[0], val9[0], val10[0], val11[0], val12[0], val13[0], val14[0], val15[0]]
+        return countQtdVit

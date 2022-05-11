@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, session, redirect
+from datetime import datetime as date
 import connection as conn
 
 app = Flask(__name__)
@@ -46,10 +47,11 @@ def showPageDenuncie():
         grauEscolarAgressor = request.form['grau-escolar-agressor'].strip()
         profissaoAgressor = request.form['profissao-agressor'].strip()
         racaAgressor = request.form['raca-agressor'].strip()
+        mes = date.today().strftime('%m')
         # Consultar IDs de grau de escolaridade e de raça.
         ids = conn.getIDs(grauEscolarVitima, racaAgressor, bairro, natuFato, grauEscolarAgressor, racaVitima)
         # Set vítima.
-        result = conn.setVitimaEAgressor(idadeVitima, qtdFilhos, ids[0], profissaoVitima, ids[1], ids[2], ids[3], idadeAgressor, ids[4], profissaoAgressor, ids[5])
+        result = conn.setVitimaEAgressor(mes, idadeVitima, qtdFilhos, ids[0], profissaoVitima, ids[1], ids[2], ids[3], idadeAgressor, ids[4], profissaoAgressor, ids[5])
         if result == 1:
             return pageDenuncie + '<script>window.alert("Denúncia realizada com sucesso!");</script>'
         else:
@@ -57,6 +59,6 @@ def showPageDenuncie():
         
 @app.route('/graficos', methods=['GET'])
 def showPageGraficos():
-    lista = conn.getQTDAlunos()
-    pageGraficos = render_template('pageGraficos.html', casos=lista)
+    lista = conn.getGrauEscolarVitima()
+    pageGraficos = render_template('pageGraficos.html', qtdGrauEscolarVitima=lista)
     return pageGraficos
