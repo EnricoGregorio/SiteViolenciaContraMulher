@@ -6,27 +6,19 @@ app = Flask(__name__)
 
 app.secret_key = "fdjhiiuhrqe9847t8307ht7hqhg"
 
-# Função para enviar os dados do Gestor das notícias para a sessão.
-def setGestorUser(user, pwdUser, pageLink):
-    if 'gestorLogin' and 'gestorPwd' in session:
-        gestorLogin = session['gestorLogin']
-        userPwd = session['gestorPwd']
-    else:
-        session['gestorLogin'] = user
-        session['gestorPwd'] = pwdUser
-    return redirect(pageLink)
-
 # Função para carregar uma página que não existe no site.
 @app.route('/<inexistente>', methods=['GET'])
 def showErrorPage(inexistente):
     pageError = render_template('pageError404.html')
     return pageError
 
+# Função para carregar a página principal do site.
 @app.route('/', methods=['GET'])
 def showIndex():
     pageIndex = render_template('index.html')
     return pageIndex
 
+# Função para carregar a página que contem um formulário para denúncias.
 @app.route('/denuncie', methods=['GET', 'POST'])
 def showPageDenuncie():
     pageDenuncie = render_template('pageDenuncie.html')
@@ -48,15 +40,22 @@ def showPageDenuncie():
         profissaoAgressor = request.form['profissao-agressor'].strip()
         racaAgressor = request.form['raca-agressor'].strip()
         mes = date.today().strftime('%m')
-        # Consultar IDs de grau de escolaridade e de raça.
+        
+        if profissaoVitima == "":
+            profissaoVitima = "Não informado"
+        if profissaoAgressor == "":
+            profissaoAgressor = "Não informado"
+        
+        # Consultar IDs de grau de escolaridade e de raça da vítima e do agressor.
         ids = conn.getIDs(grauEscolarVitima, racaAgressor, bairro, natuFato, grauEscolarAgressor, racaVitima)
-        # Set vítima.
+        # Set vítima e agressor.
         result = conn.setVitimaEAgressor(mes, idadeVitima, qtdFilhos, ids[0], profissaoVitima, ids[1], ids[2], ids[3], idadeAgressor, ids[4], profissaoAgressor, ids[5])
         if result == 1:
             return pageDenuncie + '<script>window.alert("Denúncia realizada com sucesso!");</script>'
         else:
             return pageDenuncie + '<script>window.alert("Houve algum erro ao preencher o formulário de denúncia, Por favor, tente novamente.");</script>'
-        
+
+# Função para carregar a página dos gráficos.
 @app.route('/graficos', methods=['GET'])
 def showPageGraficos():
     lista = conn.getGrauEscolarVitima()
